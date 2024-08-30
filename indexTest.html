@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Restroom Log</title>
+    <style>
+/* Full-page video background */
+body, html {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    overflow: hidden; /* Prevent scrollbars */
+    display: flex;
+    align-items: center; /* Center content vertically */
+    justify-content: center; /* Center content horizontally */
+}
+
+.background-video {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Ensure the video covers the entire area */
+    z-index: -1; /* Place the video behind other content */
+}
+
+.content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: rgba(255, 255, 255, 0.8); /* Slightly transparent background */
+    width: 300px; /* Fixed width to make it smaller */
+    max-width: 90%; /* Responsive max width */
+    box-sizing: border-box; /* Include padding and border in the element's total width and height */
+    z-index: 1; /* Place the content above the video */
+}
+
+.container {
+    margin-bottom: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%; /* Ensure container takes full width of content */
+}
+
+.button-size {
+    width: 150px; /* Adjust width as needed */
+    height: 30px; /* Adjust height as needed */
+    font-size: 14px; /* Adjust font size for better readability */
+    padding: 8px; /* Adds space inside the button */
+    margin: 5px; /* Adds space around the button */
+}
+
+textarea {
+    margin-top: 10px;
+    width: 100%; /* Ensure textarea takes full width of content */
+}
+
+    </style>
+</head>
+<body>
+    <!-- Background video -->
+    <video class="background-video" autoplay loop muted>
+        <source src="TRaiderBG.mp4" type="video/mp4">
+        Your browser does not support the video tag.
+    </video>
+
+    <div class="content">
+        <div class="container">
+            <label for="text_input1">Enter ID:</label>
+            <input type="text" id="text_input1">
+	    <button id="button3" class="button-size">Run Test</button>
+            <button id="button1" class="button-size">Submit</button>
+            <button id="button2" class="button-size">Download Log</button>
+        </div>
+        <div class="container">
+            <textarea id="text_area2" rows="3" cols="50" readonly></textarea>
+        </div>
+    </div>
+
+    <script src="scriptTest.js"></script>
+</body>
+</html>

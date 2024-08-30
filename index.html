@@ -1,0 +1,45 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Upload File</title>
+</head>
+<body>
+  <form id="uploadForm" enctype="multipart/form-data">
+    <input type="file" id="fileInput" accept=".txt" />
+    <button type="button" onclick="uploadFile()">Upload and Proceed</button>
+  </form>
+<button onclick="window.location.href='indexTest.html'">Go to Main Page</button>
+
+  <script>
+    function uploadFile() {
+      const fileInput = document.getElementById('fileInput');
+      const file = fileInput.files[0];
+
+      if (!file) {
+        alert('Please select a file.');
+        return;
+      }
+
+      const reader = new FileReader();
+      reader.onload = function(event) {
+        const fileContent = event.target.result;
+        // Parse file content
+        const data = fileContent.trim().split('\n').map(line => {
+          const [number, ...nameParts] = line.split(' ');
+          return { number, name: nameParts.join(' ') };
+        });
+
+        // Store data in sessionStorage
+        sessionStorage.setItem('fileData', JSON.stringify(data));
+
+        // Redirect to main.html
+        window.location.href = 'indexTest.html';
+      };
+      reader.readAsText(file);
+    }
+  </script>
+</body>
+</html>
