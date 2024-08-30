@@ -3,59 +3,56 @@ var count = 0;
 var found = false;
 var logList = [];
 
-document.getElementById("button1").addEventListener("click", function() {
+document.getElementById("button1").addEventListener("click", handleButtonClick);
+document.getElementById("button3").addEventListener("click", handleButtonClick);
+
+function handleButtonClick() {
     var id = document.getElementById("text_input1").value;
     var timeStamp = new Date().toUTCString();
     
     if (id !== "") {
-        if (count === 0 ) {
-            outList.push(id);
-            logList.push(id + " Depart " + timeStamp);
-            document.getElementById("text_area2").value = "Left to Restroom\n" + timeStamp;
-            count++;
-        } else {
-            for (var i = 0; i < outList.length; i++) {
-                if (id === outList[i]) {
-                    document.getElementById("text_area2").value = "Returned from Restroom\n" + timeStamp;
-                    logList.push(id + " Return " + timeStamp);
-                    outList.splice(i, 1);
-                    found = true;
-                    count--;
-                }
-            }
-            if (!found) {
+        // Retrieve data from sessionStorage
+        const fileData = JSON.parse(sessionStorage.getItem('fileData'));
+
+        if (!fileData) {
+            document.getElementById("text_area2").value = 'No data available. Please upload a file.';
+            return;
+        }
+
+        // Find the matching name
+        const match = fileData.find(entry => entry.number === id);
+
+        if (match) {
+            if (count === 0) {
                 outList.push(id);
-                logList.push(id + " Depart " + timeStamp);
-                document.getElementById("text_area2").value = "Left to Restroom\n" + timeStamp;
+                logList.push(`${match.name} Left to Restroom ${timeStamp}`);
+                document.getElementById("text_area2").value = `${match.name} Left to Restroom\n${timeStamp}`;
                 count++;
+            } else {
+                for (var i = 0; i < outList.length; i++) {
+                    if (id === outList[i]) {
+                        document.getElementById("text_area2").value = `${match.name} Returned from Restroom\n${timeStamp}`;
+                        logList.push(`${match.name} Returned from Restroom ${timeStamp}`);
+                        outList.splice(i, 1);
+                        found = true;
+                        count--;
+                    }
+                }
+                if (!found) {
+                    outList.push(id);
+                    logList.push(`${match.name} Left to Restroom ${timeStamp}`);
+                    document.getElementById("text_area2").value = `${match.name} Left to Restroom\n${timeStamp}`;
+                    count++;
+                }
+                found = false;
             }
-            found = false;
+        } else {
+            document.getElementById("text_area2").value = "No matching number found.";
         }
     } else {
-        document.getElementById("text_area2").value = "Please input ID to continue";
+        document.getElementById("text_area2").value = "Please input ID to continue.";
     }
     document.getElementById("text_input1").value = "";
-});
-
-document.getElementById("button3").addEventListener("click", function() {
-    findName(); // Corrected function name
-});
-
-function findName() {
-    const numberInput = document.getElementById('text_input1').value; // Corrected ID
-    const result = document.getElementById('text_area2');
-
-    // Retrieve data from sessionStorage
-    const fileData = JSON.parse(sessionStorage.getItem('fileData'));
-
-    if (!fileData) {
-        result.value = 'No data available. Please upload a file.';
-        return;
-    }
-
-    // Find the matching name
-    const match = fileData.find(entry => entry.number === numberInput);
-    result.value = match ? `Name: ${match.name}` : 'No matching number found.';
 }
 
 document.addEventListener('DOMContentLoaded', (event) => {
