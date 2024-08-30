@@ -7,15 +7,15 @@ document.getElementById("button1").addEventListener("click", function() {
     var id = document.getElementById("text_input1").value;
     var timeStamp = new Date().toUTCString();
     
-    if (id != "") {
-        if (count == 0 ) {
+    if (id !== "") {
+        if (count === 0 ) {
             outList.push(id);
             logList.push(id + " Depart " + timeStamp);
             document.getElementById("text_area2").value = "Left to Restroom\n" + timeStamp;
             count++;
         } else {
             for (var i = 0; i < outList.length; i++) {
-                if (id == outList[i]) {
+                if (id === outList[i]) {
                     document.getElementById("text_area2").value = "Returned from Restroom\n" + timeStamp;
                     logList.push(id + " Return " + timeStamp);
                     outList.splice(i, 1);
@@ -36,37 +36,28 @@ document.getElementById("button1").addEventListener("click", function() {
     }
     document.getElementById("text_input1").value = "";
 });
-// New-------------------------
+
 document.getElementById("button3").addEventListener("click", function() {
-	findname()}
+    findName(); // Corrected function name
+});
 
+function findName() {
+    const numberInput = document.getElementById('text_input1').value; // Corrected ID
+    const result = document.getElementById('text_area2');
 
+    // Retrieve data from sessionStorage
+    const fileData = JSON.parse(sessionStorage.getItem('fileData'));
 
-    function findName() {
-      const numberInput = document.getElementById('numberInput').value;
-      const result = document.getElementById('text_area2');
-
-      // Retrieve data from sessionStorage
-      const fileData = JSON.parse(sessionStorage.getItem('fileData'));
-
-      if (!fileData) {
-        text_area2.textContent = 'No data available. Please upload a file.';
+    if (!fileData) {
+        result.value = 'No data available. Please upload a file.';
         return;
-      }
-
-      // Find the matching name
-      const match = fileData.find(entry => entry.number === numberInput);
-      if (match) {
-        text_area2.textContent = `Name: ${match.name}`;
-      } else {
-        text_area2.textContent = 'No matching number found.';
-      }
     }
 
+    // Find the matching name
+    const match = fileData.find(entry => entry.number === numberInput);
+    result.value = match ? `Name: ${match.name}` : 'No matching number found.';
+}
 
-
-
-// New End-----------------------------
 document.addEventListener('DOMContentLoaded', (event) => {
     const inputBox = document.getElementById('text_input1');
     inputBox.focus(); // Focus the input box when the page loads
