@@ -30,10 +30,10 @@
         const lines = fileContent.split('\n').map(line => line.trim());
 
         // Get the first four numbers
-        const firstFourNumbers = lines.slice(0, 4).map(Number);
+        const firstFourNumbers = lines.slice(0, 5).map(line => line.trim());
 
         // Get the rest of the data as {number, name}
-        const dataList = lines.slice(4).map(line => {
+        const dataList = lines.slice(5).map(line => {
           const [number, ...nameParts] = line.split(' ');
           return { number, name: nameParts.join(' ') };
         });

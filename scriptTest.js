@@ -134,18 +134,13 @@ document.getElementById("button4").addEventListener("click", function() {
     downloadLog();
 });
 function submitToForm(value, id, location, status,num){
-    const googleFormURL = "https://docs.google.com/forms/u/0/d/e/1FAIpQLSdxaLzSWfNDao42Fv0dChmlABKq0BLLPnCMZkRA3TI_Vl9wLg/formResponse";
+    const googleFormURL = num[4];
     const formData = new FormData();
 
     formData.append(`entry.${num[0]}`, value.name);
     formData.append(`entry.${num[1]}`, id);
     formData.append(`entry.${num[2]}`, location);
     formData.append(`entry.${num[3]}`, status);
-
-    //formData.append('entry.1306696328', `${firstFourNumbers[0]}`);
-    //formData.append('entry.428718456', `${firstFourNumbers[1]}`);
-    //formData.append('entry.2102814176', `${firstFourNumbers[2]}`);
-    //formData.append('entry.1839909552', `${firstFourNumbers[3]}`);
 
     fetch(googleFormURL, {
         method: 'POST',
