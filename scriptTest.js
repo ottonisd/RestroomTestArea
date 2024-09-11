@@ -10,6 +10,8 @@ document.getElementById("button3").addEventListener("click", handleButtonClick);
 function handleButtonClick(event) {
     var id = document.getElementById("text_input1").value;
     var timeStamp = new Date().toUTCString();
+    let dataList = [];
+    let match = null;
     
     if (id !== "") {
         // Retrieve data from sessionStorage
@@ -17,19 +19,20 @@ function handleButtonClick(event) {
 
 
         if (fileData){
-	    const { dataList } = fileData;
+	    ({ dataList } = fileData);
+	    match = dataList.find(entry => entry.number === id);
+
 	}
-        else {
-            document.getElementById("text_area2").value = 'No data available. Please upload a file.';
-            return;
-        }
-
-	document.getElementById("text_area2").value = "test";
-
-        // Find the matching name
-        const match = dataList.find(entry => entry.number === id);
-
+if (match) {
+document.getElementById("text_area2").value = "Hi";
+}
+        //else {
+           // document.getElementById("text_area2").value = 'No data available. Please upload a file.';
+            //return;
+       // }
+	document.getElementById("text_area2").value = `Found: ${match.name}`;
         if (match) {
+	document.getElementById("text_area2").value = "test1";
             if (count === 0) {
                 outList.push(id);
 	    	if (event.target.id === "button1"){
