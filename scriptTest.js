@@ -12,6 +12,7 @@ function handleButtonClick(event) {
     var timeStamp = new Date().toUTCString();
     let dataList = [];
     let match = null;
+    let firstFourNumbers = [];
     
     if (id !== "") {
         // Retrieve data from sessionStorage
@@ -19,35 +20,34 @@ function handleButtonClick(event) {
 
 
         if (fileData){
-	    ({ dataList } = fileData);
+	    ({ firstFourNumbers, dataList } = fileData);
+		
 	    match = dataList.find(entry => entry.number === id);
 
+
 	}
-if (match) {
-document.getElementById("text_area2").value = "Hi";
-}
-        //else {
-           // document.getElementById("text_area2").value = 'No data available. Please upload a file.';
-            //return;
-       // }
-	document.getElementById("text_area2").value = `Found: ${match.name}`;
+
+        else {
+           document.getElementById("text_area2").value = 'No data available. Please upload a file.';
+           return;
+        }
+
         if (match) {
-	document.getElementById("text_area2").value = "test1";
             if (count === 0) {
                 outList.push(id);
 	    	if (event.target.id === "button1"){
                 	logList.push(`${match.name} Left to Restroom ${timeStamp}`);
-			submitToForm(match,id,"Restroom","Leaving");
+			submitToForm(match,id,"Restroom","Leaving", firstFourNumbers);
                 	document.getElementById("text_area2").value = `${match.name} Left to Restroom\n${timeStamp}`;
                 	count++;}
 		if (event.target.id === "button2"){
                 	logList.push(`${match.name} Left to Office ${timeStamp}`);
-			submitToForm(match,id,"Office","Leaving");
+			submitToForm(match,id,"Office","Leaving", firstFourNumbers);
                 	document.getElementById("text_area2").value = `${match.name} Left to Office\n${timeStamp}`;
                 	count++;}
 		if (event.target.id === "button3"){
                 	logList.push(`${match.name} Left to Nurse ${timeStamp}`);
-			submitToForm(match,id,"Nurse","Leaving");
+			submitToForm(match,id,"Nurse","Leaving", firstFourNumbers);
                 	document.getElementById("text_area2").value = `${match.name} Left to Nurse\n${timeStamp}`;
                 	count++;}
             } else {
@@ -55,21 +55,21 @@ document.getElementById("text_area2").value = "Hi";
                     if (id === outList[i]) {
 			if (event.target.id === "button1"){
                         	document.getElementById("text_area2").value = `${match.name} Returned from Restroom\n${timeStamp}`;
-				submitToForm(match,id,"Restroom","Returned");
+				submitToForm(match,id,"Restroom","Returned", firstFourNumbers);
                         	logList.push(`${match.name} Returned from Restroom ${timeStamp}`);
                         	outList.splice(i, 1);
                         	found = true;
                         	count--;}
 			if (event.target.id === "button2"){
                         	document.getElementById("text_area2").value = `${match.name} Returned from Office\n${timeStamp}`;
-				submitToForm(match,id,"Office","Returned");
+				submitToForm(match,id,"Office","Returned", firstFourNumbers);
                         	logList.push(`${match.name} Returned from Office ${timeStamp}`);
                         	outList.splice(i, 1);
                         	found = true;
                         	count--;}
 			if (event.target.id === "button3"){
                         	document.getElementById("text_area2").value = `${match.name} Returned from Nurse\n${timeStamp}`;
-				submitToForm(match,id,"Nurse","Returned");
+				submitToForm(match,id,"Nurse","Returned", firstFourNumbers);
                         	logList.push(`${match.name} Returned from Nurse ${timeStamp}`);
                         	outList.splice(i, 1);
                         	found = true;
@@ -80,19 +80,19 @@ document.getElementById("text_area2").value = "Hi";
 		    if (event.target.id === "button1"){
                     	outList.push(id);
                     	logList.push(`${match.name} Left to Restroom ${timeStamp}`);
-			submitToForm(match,id,"Restroom","Leaving");
+			submitToForm(match,id,"Restroom","Leaving", firstFourNumbers);
                     	document.getElementById("text_area2").value = `${match.name} Left to Restroom\n${timeStamp}`;
                     	count++;}
 		    if (event.target.id === "button2"){
                     	outList.push(id);
                     	logList.push(`${match.name} Left to Office ${timeStamp}`);
-			submitToForm(match,id,"Office","Leaving");
+			submitToForm(match,id,"Office","Leaving", firstFourNumbers);
                     	document.getElementById("text_area2").value = `${match.name} Left to Office\n${timeStamp}`;
                     	count++;}
 		    if (event.target.id === "button2"){
                     	outList.push(id);
                     	logList.push(`${match.name} Left to Nurse ${timeStamp}`);
-			submitToForm(match,id,"Nurse","Leaving");
+			submitToForm(match,id,"Nurse","Leaving", firstFourNumbers);
                     	document.getElementById("text_area2").value = `${match.name} Left to Nurse\n${timeStamp}`;
                     	count++;}
                 }
@@ -133,14 +133,19 @@ function downloadLog() {
 document.getElementById("button4").addEventListener("click", function() {
     downloadLog();
 });
-function submitToForm(value, id, location, status){
+function submitToForm(value, id, location, status,num){
     const googleFormURL = "https://docs.google.com/forms/u/0/d/e/1FAIpQLSdxaLzSWfNDao42Fv0dChmlABKq0BLLPnCMZkRA3TI_Vl9wLg/formResponse";
     const formData = new FormData();
 
-    formData.append('entry.1306696328', value.name);
-    formData.append('entry.428718456', id);
-    formData.append('entry.2102814176', location);
-    formData.append('entry.1839909552', status);
+    formData.append(`entry.${num[0]}`, value.name);
+    formData.append(`entry.${num[1]}`, id);
+    formData.append(`entry.${num[2]}`, location);
+    formData.append(`entry.${num[3]}`, status);
+
+    //formData.append('entry.1306696328', `${firstFourNumbers[0]}`);
+    //formData.append('entry.428718456', `${firstFourNumbers[1]}`);
+    //formData.append('entry.2102814176', `${firstFourNumbers[2]}`);
+    //formData.append('entry.1839909552', `${firstFourNumbers[3]}`);
 
     fetch(googleFormURL, {
         method: 'POST',
