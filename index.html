@@ -10,7 +10,7 @@
     <input type="file" id="fileInput" accept=".txt" />
     <button type="button" onclick="uploadFile()">Upload and Proceed</button>
   </form>
-<button onclick="window.location.href='indexTest.html'">Go to Main Page</button>
+  <button onclick="window.location.href='indexTest.html'">Go to Main Page</button>
 
   <script>
     function uploadFile() {
@@ -24,17 +24,30 @@
 
       const reader = new FileReader();
       reader.onload = function(event) {
-        const fileContent = event.target.result;
-        // Parse file content
-        const data = fileContent.trim().split('\n').map(line => {
+        const fileContent = event.target.result.trim();
+
+        // Split the content by lines
+        const lines = fileContent.split('\n').map(line => line.trim());
+
+        // Get the first four numbers
+        const firstFourNumbers = lines.slice(0, 4).map(Number);
+
+        // Get the rest of the data as {number, name}
+        const dataList = lines.slice(4).map(line => {
           const [number, ...nameParts] = line.split(' ');
           return { number, name: nameParts.join(' ') };
         });
 
-        // Store data in sessionStorage
-        sessionStorage.setItem('fileData', JSON.stringify(data));
+        // Prepare the data to be stored in sessionStorage
+        const allData = {
+          firstFourNumbers: firstFourNumbers,
+          dataList: dataList
+        };
 
-        // Redirect to main.html
+        // Store data in sessionStorage
+        sessionStorage.setItem('fileData', JSON.stringify(allData));
+
+        // Redirect to the next page
         window.location.href = 'indexTest.html';
       };
       reader.readAsText(file);
